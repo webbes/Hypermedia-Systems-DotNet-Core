@@ -1,4 +1,4 @@
-﻿namespace Domain;
+namespace Domain;
 
 internal class ContactService(HypermediaDbContext context) : IContactService
 {
@@ -14,10 +14,10 @@ internal class ContactService(HypermediaDbContext context) : IContactService
     public Task<List<Contact>> SearchAsync(string? term = null)
         => context.Contacts
             .Where(c => string.IsNullOrEmpty(term)
-                    || (c.First!.Contains(term) ||
-                        c.Last!.Contains(term) ||
-                        c.Email.Contains(term) ||
-                        c.Phone!.Contains(term)))
+                    || (c.First!.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                        c.Last!.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                        c.Email.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                        c.Phone!.Contains(term, StringComparison.OrdinalIgnoreCase)))
             .ToListAsync();
 
     public async Task<Contact> CreateAsync(Contact contact)
@@ -34,7 +34,9 @@ internal class ContactService(HypermediaDbContext context) : IContactService
             Phone = contact.Phone,
             Email = contact.Email
         };
+
         context.Contacts.Add(entity);
+        
         await context.SaveChangesAsync();
 
         return entity;
@@ -63,6 +65,7 @@ internal class ContactService(HypermediaDbContext context) : IContactService
 
         return true;
     }
+
     public async Task<bool> DeleteAsync(int id)
     {
         var entity = await context.Contacts.FindAsync(id);

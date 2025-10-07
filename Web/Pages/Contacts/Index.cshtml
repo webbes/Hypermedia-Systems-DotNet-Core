@@ -1,17 +1,26 @@
-﻿@page
+@page
 @model Web.Pages.Contacts.IndexModel
 
 @{
     ViewData["Title"] = "Index";
+
+    var successMessage = TempData["SuccessMessage"] as string;
 }
 
 <h1>Index</h1>
+
+@if (!string.IsNullOrWhiteSpace(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
 
 <div class="row">
     <div class="col-md-4">
         <form class="form-inline">
             <div class="input-group mb-2">
-                <input asp-for="SearchTerm" class="form-control" placeholder="search" />
+                <input asp-for="SearchTerm" class="form-control" placeholder="search" autofocus />
 				<button type="submit" class="btn btn-primary">Search</button>
             </div>
         </form>

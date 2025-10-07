@@ -1,4 +1,4 @@
-﻿namespace Web.Pages.Contacts;
+namespace Web.Pages.Contacts;
 
 public class EditModel(IContactService contacts) : PageModel
 {
@@ -30,9 +30,17 @@ public class EditModel(IContactService contacts) : PageModel
             return Page();
         }
 
-        await _contacts.UpdateAsync(Contact);
+        try
+        { 
+            await _contacts.UpdateAsync(Contact);
+        }
+        catch (ArgumentException)
+        {
+            ModelState.AddModelError("Contact.Email", "A contact with the same email already exists!");
+            return Page();
+        }
 
-
+        TempData["SuccessMessage"] = "Contact updated successfully.";
         return RedirectToPage("./Index");
     }
 }

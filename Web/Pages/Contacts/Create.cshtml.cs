@@ -1,4 +1,4 @@
-﻿namespace Web.Pages.Contacts;
+namespace Web.Pages.Contacts;
 
 public class CreateModel(IContactService contacts) : PageModel
 {
@@ -19,8 +19,17 @@ public class CreateModel(IContactService contacts) : PageModel
             return Page();
         }
 
-        await _contacts.CreateAsync(Contact);
+        try
+        {
+            await _contacts.CreateAsync(Contact);
+        }
+        catch (ArgumentException)
+        {
+            ModelState.AddModelError("Contact.Email", "A contact with the same email already exists!");
+            return Page();
+        }
 
+        TempData["SuccessMessage"] = "Contact created successfully.";
         return RedirectToPage("./Index");
     }
 }
