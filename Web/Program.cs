@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEntityFramework()
                 .AddDomain();
 
+builder.Services.AddControllers();
 
 builder.Services.AddRazorPages()
                 .AddViewOptions(options =>
@@ -33,5 +34,7 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+app.MapControllers();
 
 app.Run();

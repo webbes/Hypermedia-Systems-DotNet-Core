@@ -1,4 +1,4 @@
-﻿namespace Web.Pages.Contacts;
+namespace Web.Pages.Contacts;
 
 public class DeleteModel(IContactService contacts) : PageModel
 {
@@ -39,6 +39,7 @@ public class DeleteModel(IContactService contacts) : PageModel
             await _contacts.DeleteAsync(id.Value);
         }
 
+        TempData["SuccessMessage"] = "Contact deleted successfully.";
         return RedirectToPage("./Index");
     }
 }
